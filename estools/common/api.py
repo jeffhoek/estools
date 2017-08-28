@@ -145,7 +145,7 @@ def update_setting(params=None, key=None, value=None):
 @request()
 def _scan_query(params=None, query=None):
 
-    url = "%(schema)s://%(host)s:%(port)i/%(index)s/%(type)s/_search?search_type=scan&scroll=1m&size=%(page_size)i" % vars(params)
+    url = "%(schema)s://%(host)s:%(port)i/%(index)s/%(type)s/_search?&scroll=1m&size=%(page_size)i" % vars(params)
     response = params.session.get(url=url, data=query, stream=False, verify=False)
     return url, response
 
