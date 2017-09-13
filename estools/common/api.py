@@ -164,16 +164,13 @@ def scan(params=None, query='{"query": {"match_all": {}}}'):
     url, response = _scan_query(params=params, query=query)
     data = response.json()
 
-    for hit in data['hits']['hits']:
-        yield hit['_source']
-
     while True:
 
-        url, response = _scan_scroll(params=params, scroll_id=data['_scroll_id'])
-        data = response.json()
         if not data['hits']['hits']:
             break
 
         for hit in data['hits']['hits']:
             yield hit['_source']
 
+        url, response = _scan_scroll(params=params, scroll_id=data['_scroll_id'])
+        data = response.json()
