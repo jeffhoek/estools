@@ -145,7 +145,7 @@ def update_setting(params=None, key=None, value=None):
 @request()
 def _scan_query(params=None, query=None):
 
-    url = "%(schema)s://%(host)s:%(port)i/%(index)s/%(type)s/_search?search_type=scan&scroll=1m&size=%(page_size)i" % vars(params)
+    url = "%(schema)s://%(host)s:%(port)i/%(index)s/%(type)s/_search?&scroll=1m&size=%(page_size)i" % vars(params)
     response = params.session.get(url=url, data=query, stream=False, verify=False)
     return url, response
 
@@ -166,11 +166,11 @@ def scan(params=None, query='{"query": {"match_all": {}}}'):
 
     while True:
 
-        url, response = _scan_scroll(params=params, scroll_id=data['_scroll_id'])
-        data = response.json()
         if not data['hits']['hits']:
             break
 
         for hit in data['hits']['hits']:
             yield hit['_source']
 
+        url, response = _scan_scroll(params=params, scroll_id=data['_scroll_id'])
+        data = response.json()
